@@ -79,9 +79,9 @@ class ControladorLuces:
             umbral_encender = 180
             umbral_apagar = 130
             
-            if luz > umbral_encender:
+            if luz < umbral_encender:
                 self.encender_luces()
-            elif luz < umbral_apagar:
+            elif luz > umbral_apagar:
                 self.apagar_luces()
 
             if (tiempo_actual - self.ultima_subida) >= 5.0:
