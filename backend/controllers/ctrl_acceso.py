@@ -110,6 +110,7 @@ class ControladorAcceso:
 
     def procesar(self):
         distancia = self.leer_distancia_mediana()
+        self.distancia_actual= distancia
         tiempo_actual = time.time()
 
         if distancia is not None:

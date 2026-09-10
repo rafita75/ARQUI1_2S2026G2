@@ -75,6 +75,7 @@ class ControladorSeguridad:
 
     def procesar(self):
         nivel_gas = self.leer_gas()
+        self.nivel_gas = nivel_gas
         tiempo_actual = time.time()
         estado_global = "NORMAL"
 
