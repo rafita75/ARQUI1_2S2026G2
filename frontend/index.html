@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Inteligente - Grupo 2</title>
+    <!-- Enlazamos nuestro CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js para las gráficas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- MQTT para WebSockets -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Centro de Control - Grupo 2</h1>
+        <div class="estado-global">Estado Global: <span id="estado-global">CONECTANDO...</span></div>
+    </header>
+
+    <div class="contenedor-principal">
+        <!-- ========================================== -->
+        <!-- PANEL PRINCIPAL (Lecturas y Actuadores en Vivo) -->
+        <!-- ========================================== -->
+        <section class="panel-modulo">
+            <h2>Sensores en Vivo (MQTT)</h2>
+            <div class="grid-stats">
+                <div class="card"><h3>Temperatura</h3><p id="live-temp">-- °C</p></div>
+                <div class="card"><h3>Humedad</h3><p id="live-hum">-- %</p></div>
+                <div class="card"><h3>Gas</h3><p id="live-gas">-- /255</p></div>
+                <div class="card"><h3>Distancia</h3><p id="live-dist">-- cm</p></div>
+                <div class="card"><h3>Luz</h3><p id="live-luz">-- /255</p></div>
+            </div>
+
+            <h2 style="margin-top: 20px;">Estado de Actuadores</h2>
+            <div class="grid-stats actuadores">
+                <div class="card"><h3>Puerta</h3><p id="estado-puerta">--</p></div>
+                <div class="card"><h3>Luces</h3><p id="estado-luces">--</p></div>
+                <div class="card"><h3>Ventilador</h3><p id="estado-ventilador">--</p></div>
+                <div class="card"><h3>Alarma</h3><p id="estado-alarma">--</p></div>
+            </div>
+
+            <h2 style="margin-top: 20px;">Último Análisis ARM64</h2>
+            <div class="card arm64-card">
+                <p><strong>Promedio:</strong> <span id="arm-avg">--</span> °C | <strong>Máx:</strong> <span id="arm-max">--</span> °C | <strong>Mín:</strong> <span id="arm-min">--</span> °C</p>
+                <p><em>Tiempo de ejecución: <span id="arm-time">--</span> ms</em></p>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- CONTROLES REMOTOS (MQTT) -->
+        <!-- ========================================== -->
+        <section class="panel-modulo">
+            <h2>Controles Remotos</h2>
+            <div class="controles-grid">
+                <div class="control-box">
+                    <h3>🚪 Puerta</h3>
+                    <button class="btn-green" onclick="enviarComando('puerta', 'ABRIR')">Abrir</button>
+                    <button class="btn-red" onclick="enviarComando('puerta', 'CERRAR')">Cerrar</button>
+                </div>
+                <div class="control-box">
+                    <h3>💡 Luces</h3>
+                    <button class="btn-yellow" onclick="enviarComando('luces', 'ENCENDER')">ON</button>
+                    <button class="btn-gray" onclick="enviarComando('luces', 'APAGAR')">OFF</button>
+                    <button class="btn-blue" onclick="enviarComando('luces', 'AUTO')">AUTO</button>
+                </div>
+                <div class="control-box">
+                    <h3>❄️ Ventilador</h3>
+                    <button class="btn-yellow" onclick="enviarComando('ventilador', 'ENCENDER')">ON</button>
+                    <button class="btn-gray" onclick="enviarComando('ventilador', 'APAGAR')">OFF</button>
+                </div>
+                <div class="control-box">
+                    <h3>🚨 Seguridad</h3>
+                    <button class="btn-gray" onclick="enviarComando('seguridad', 'SILENCIAR')">Silenciar Alarma</button>
+                    <button class="btn-blue" onclick="enviarComando('seguridad', 'RESET')">Restablecer Sistema</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- GRÁFICAS (Consumen API) -->
+        <!-- ========================================== -->
+        <section class="panel-modulo graficas-section">
+            <div class="header-graficas">
+                <h2>Gráficas Históricas</h2>
+                <button class="btn-blue" onclick="cargarTodasLasGraficas()">Actualizar Gráficas</button>
+            </div>
+            <div class="grid-graficas">
+                <div class="grafica-container"><canvas id="graficaTemp"></canvas></div>
+                <div class="grafica-container"><canvas id="graficaHum"></canvas></div>
+                <div class="grafica-container"><canvas id="graficaGas"></canvas></div>
+                <div class="grafica-container"><canvas id="graficaDist"></canvas></div>
+                <div class="grafica-container"><canvas id="graficaLuz"></canvas></div>
+                <div class="grafica-container"><canvas id="graficaArm"></canvas></div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- HISTORIAL (Consumen API) -->
+        <!-- ========================================== -->
+        <section class="panel-modulo historial-section">
+            <h2>Historial del Sistema</h2>
+            <div class="grid-historial">
+                <div class="historial-box">
+                    <h3>Últimos Eventos</h3>
+                    <ul id="lista-eventos"><li>Cargando...</li></ul>
+                </div>
+                <div class="historial-box">
+                    <h3>Comandos Remotos</h3>
+                    <ul id="lista-comandos"><li>Cargando...</li></ul>
+                </div>
+                <div class="historial-box">
+                    <h3>Resultados ARM64</h3>
+                    <ul id="lista-arm64"><li>Cargando...</li></ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Enlazamos nuestro JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
