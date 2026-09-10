@@ -1,0 +1,4 @@
+MÁX=30
+MIN=29
+AVG=29
+COUNT=20

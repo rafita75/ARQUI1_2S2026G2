@@ -72,6 +72,7 @@ class ControladorLuces:
 
     def procesar(self):
         luz = self.leer_luminosidad()
+        self.nivel_luz = luz
         tiempo_actual = time.time()
 
         if luz is not None:
