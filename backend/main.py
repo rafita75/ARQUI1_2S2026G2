@@ -14,6 +14,7 @@ from controllers.ctrl_luces import ControladorLuces
 
 from models.modelo_estado import EstadoModel, EstadoSchema
 from models.modelo_arm64 import Arm64Model, Arm64Schema
+from models.modelo_comandos import ComandosModel, ComandoSchema
 
 # Pines para los LEDs de estado global
 PIN_LED_VERDE = 13
@@ -36,8 +37,12 @@ def main():
 
     db_estado = EstadoModel()
     db_arm64 = Arm64Model()
+    db_comandos = ComandosModel()
     ultima_subida_estado = 0.0
     ultimo_estado_global = ""
+
+    def registrar_comando(actuador, accion, origen):
+        db_comandos.guardar(ComandoSchema(actuador=actuador, accion=accion, origen=origen))
 
     # Banderas para los botones
     modo_luces_auto = True
@@ -58,8 +63,12 @@ def main():
     # 1. Botón Puerta
     def accion_btn_puerta():
         print("\n🔘 [BOTÓN] Alternando puerta...")
-        if acceso.puerta_abierta: acceso.cerrar_puerta(forzar=True)
-        else: acceso.abrir_puerta()
+        if acceso.puerta_abierta:
+            acceso.cerrar_puerta(forzar=True)
+            registrar_comando("Puerta", "CERRAR", "Botón Físico")
+        else:
+            acceso.abrir_puerta()
+            registrar_comando("Puerta", "ABRIR", "Botón Físico")
 
     # 2. Botón Luces (Auto / Manual)
     def accion_btn_luces():
@@ -67,37 +76,45 @@ def main():
         if modo_luces_auto:
             modo_luces_auto = False
             print("\n🔘 [BOTÓN] Modo Luces: MANUAL (Alternando estado...)")
-            if luces.luces_encendidas: luces.apagar_luces()
-            else: luces.encender_luces()
+            if luces.luces_encendidas:
+                luces.apagar_luces()
+                registrar_comando("Luces", "APAGAR (manual)", "Botón Físico")
+            else:
+                luces.encender_luces()
+                registrar_comando("Luces", "ENCENDER (manual)", "Botón Físico")
         else:
             modo_luces_auto = True
             print("\n🔘 [BOTÓN] Modo Luces: AUTOMÁTICO (Control por LDR)")
+            registrar_comando("Luces", "AUTO", "Botón Físico")
 
-    # 3. Botón Silenciar Buzzer
-    def accion_btn_silenciar():
+    # 3. Botón Silenciar Buzzer (tambien reutilizado por el comando MQTT de seguridad)
+    def accion_btn_silenciar(origen="Botón Físico"):
         nonlocal buzzer_silenciado
         if seguridad.alarma_activada:
             buzzer_silenciado = True
             GPIO.output(seguridad.pin_buzzer, GPIO.LOW)
             print("\n🔘 [BOTÓN] 🔇 Buzzer silenciado. (Peligro aún activo)")
+            registrar_comando("Alarma", "SILENCIAR", origen)
 
-    # 4. Botón Restablecer Alerta
-    def accion_btn_reset():
+    # 4. Botón Restablecer Alerta (tambien reutilizado por el comando MQTT de seguridad)
+    def accion_btn_reset(origen="Botón Físico"):
         nonlocal buzzer_silenciado
         print("\n🔘 [BOTÓN] Intentando restablecer alertas...")
-        
+
         # Validar si el peligro de gas ya pasó
         if seguridad.nivel_gas is not None and seguridad.nivel_gas < 180:
             seguridad.desactivar_alarma(forzar=True)
             buzzer_silenciado = False
             print("✅ Alarma de gas restablecida. Sistema seguro.")
+            registrar_comando("Alarma", "RESET", origen)
         elif seguridad.alarma_activada:
             print("⚠️ DENEGADO: Aún hay altos niveles de gas detectados.")
-            
+
         # Validar si el peligro de temperatura ya pasó
         if clima.last_temperature is not None and clima.last_temperature < 28.0:
             clima.apagar_ventilador(forzar=True)
             print("✅ Advertencia térmica restablecida.")
+            registrar_comando("Ventilador", "RESET", origen)
 
     temperaturas_para_arm = []
     ultima_recoleccion_temp = 0.0
@@ -117,7 +134,9 @@ def main():
         if msg.topic == "grupo2/edificio/comandos/puerta":
             if comando == "ABRIR": acceso.abrir_puerta()
             elif comando == "CERRAR": acceso.cerrar_puerta(forzar=True)
-            
+            else: return
+            registrar_comando("Puerta", comando, "Dashboard Web")
+
         elif msg.topic == "grupo2/edificio/comandos/luces":
             nonlocal modo_luces_auto
             if comando == "ENCENDER":
@@ -128,6 +147,9 @@ def main():
                 luces.apagar_luces()
             elif comando == "AUTO":
                 modo_luces_auto = True
+            else:
+                return
+            registrar_comando("Luces", comando, "Dashboard Web")
 
         elif msg.topic == "grupo2/edificio/comandos/ventilador":
             if comando == "ENCENDER":
@@ -138,12 +160,15 @@ def main():
                 clima.apagar_ventilador(forzar=True)
             elif comando == "AUTO":
                 clima.modo_manual = False
+            else:
+                return
+            registrar_comando("Ventilador", comando, "Dashboard Web")
 
         elif msg.topic == "grupo2/edificio/comandos/seguridad":
             if comando == "SILENCIAR":
-                accion_btn_silenciar()
+                accion_btn_silenciar(origen="Dashboard Web")
             elif comando == "RESET":
-                accion_btn_reset()
+                accion_btn_reset(origen="Dashboard Web")
 
     cliente_mqtt.on_message = al_recibir_mensaje
     cliente_mqtt.connect(broker, puerto, 60)
