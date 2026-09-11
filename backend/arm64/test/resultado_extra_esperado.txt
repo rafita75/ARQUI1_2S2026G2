@@ -1,0 +1,4 @@
+MÁX=33
+MIN=15
+AVG=23
+COUNT=10
