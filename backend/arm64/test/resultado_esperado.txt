@@ -1,0 +1,4 @@
+MÁX=27
+MIN=21
+AVG=24
+COUNT=4
