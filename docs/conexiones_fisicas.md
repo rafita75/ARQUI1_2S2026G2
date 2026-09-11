@@ -57,10 +57,12 @@ flowchart TB
 | I2C (0x48) | PCF8591 — LDR (AIN0) y MQ-2 (AIN1) | `ctrl_luces.py`, `ctrl_seguridad.py` |
 | I2C (0x27) | LCD 16x2 | `lcd_view.py` |
 
-> Nota: no hay un pin GPIO dedicado documentado en el código para "LED rojo
-> = estado EMERGENCIA" del sistema de estado global (sección 5 del
-> enunciado); el pin 26 se usa como LED de alarma de gas dentro de
-> `ctrl_seguridad.py`. Vale la pena aclarar en la documentación si ese mismo
-> LED cumple ambos roles (alarma de gas + estado global EMERGENCIA) o si se
-> necesita uno adicional — esta nota es solo para la documentación, no
-> implica ningún cambio de código.
+> Nota: el pin 26 (LED rojo de `ctrl_seguridad.py`, alarma de gas) cumple
+> ambos roles: alarma de gas Y "LED rojo = estado global EMERGENCIA" (sección
+> 5 del enunciado). `main.py` ahora lo enciende explícitamente
+> (`GPIO.output(seguridad.pin_led_rojo, GPIO.HIGH)`) dentro del bloque que
+> determina el estado global EMERGENCIA, además de que `ctrl_seguridad.py` ya
+> lo encendía por su cuenta al detectar gas — como hoy EMERGENCIA solo ocurre
+> por gas, es el mismo LED; si en el futuro se agrega otra causa de
+> EMERGENCIA, seguiría encendiéndose correctamente porque ya no depende
+> únicamente de `ctrl_seguridad.py`.

@@ -240,6 +240,7 @@ def main():
 
                 GPIO.output(PIN_LED_VERDE, GPIO.LOW)
                 GPIO.output(PIN_LED_AMARILLO, GPIO.LOW)
+                GPIO.output(seguridad.pin_led_rojo, GPIO.HIGH)  # LED rojo = estado global EMERGENCIA
 
                 if not acceso.puerta_abierta:
                     print(" [SISTEMA CENTRAL] ¡Emergencia! Abriendo puertas de evacuación...")
