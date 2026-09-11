@@ -129,12 +129,30 @@ def main():
             elif comando == "AUTO":
                 modo_luces_auto = True
 
+        elif msg.topic == "grupo2/edificio/comandos/ventilador":
+            if comando == "ENCENDER":
+                clima.modo_manual = True
+                clima.encender_ventilador()
+            elif comando == "APAGAR":
+                clima.modo_manual = True
+                clima.apagar_ventilador(forzar=True)
+            elif comando == "AUTO":
+                clima.modo_manual = False
+
+        elif msg.topic == "grupo2/edificio/comandos/seguridad":
+            if comando == "SILENCIAR":
+                accion_btn_silenciar()
+            elif comando == "RESET":
+                accion_btn_reset()
+
     cliente_mqtt.on_message = al_recibir_mensaje
     cliente_mqtt.connect(broker, puerto, 60)
-    
+
     # Nos suscribimos a los tópicos de control para escuchar al Dashboard
     cliente_mqtt.subscribe("grupo2/edificio/comandos/puerta")
     cliente_mqtt.subscribe("grupo2/edificio/comandos/luces")
+    cliente_mqtt.subscribe("grupo2/edificio/comandos/ventilador")
+    cliente_mqtt.subscribe("grupo2/edificio/comandos/seguridad")
     
     # Arrancamos el hilo de MQTT en segundo plano
     cliente_mqtt.loop_start()
@@ -206,9 +224,9 @@ def main():
                 if not luces.luces_encendidas:
                     luces.encender_luces()
 
-            elif clima.ventilador_encendido:
+            elif clima.ventilador_encendido or clima.humedad_fuera_rango:
                 nivel_estado = "ADVERTENCIA"
-                razon = "Temperatura alta"
+                razon = "Temperatura alta" if clima.ventilador_encendido else "Humedad fuera de rango"
 
                 GPIO.output(PIN_LED_VERDE, GPIO.LOW)
                 GPIO.output(PIN_LED_AMARILLO, GPIO.HIGH)

@@ -25,6 +25,8 @@ class ControladorClima:
         
         # Estado del actuador
         self.ventilador_encendido = False
+        self.modo_manual = False  # True cuando el dashboard controla el ventilador directamente
+        self.humedad_fuera_rango = False
         
         # Bases de datos
         self.db_lecturas = LecturasModel()
@@ -101,11 +103,18 @@ class ControladorClima:
                 # Encendemos si pasa de 28°C, apagamos si baja de 26.5°C
                 umbral_calor = 28.0
                 umbral_frio = 26.5
-                
-                if temp >= umbral_calor:
-                    self.encender_ventilador()
-                elif temp <= umbral_frio:
-                    self.apagar_ventilador()
+
+                # Mismo criterio que la temperatura, pero para humedad fuera de rango
+                umbral_humedad_alta = 70.0
+                umbral_humedad_baja = 30.0
+                self.humedad_fuera_rango = (hum >= umbral_humedad_alta) or (hum <= umbral_humedad_baja)
+
+                # El control automático del ventilador se omite si el dashboard lo puso en manual
+                if not self.modo_manual:
+                    if temp >= umbral_calor:
+                        self.encender_ventilador()
+                    elif temp <= umbral_frio:
+                        self.apagar_ventilador()
 
                 # Subida de datos a MongoDB (Cada 10 segundos)
                 if (tiempo_actual - self.ultima_subida) >= 10.0:
