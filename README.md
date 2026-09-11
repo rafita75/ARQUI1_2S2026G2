@@ -13,6 +13,7 @@ Edificio Inteligente IoT con Raspberry Pi ARM64.
 
 ## Documentación técnica
 
+- [Manual técnico (informe completo)](docs/manual_tecnico.md)
 - [Arquitectura del sistema](docs/arquitectura.md)
 - [Topics MQTT](docs/mqtt_topics.md)
 - [Esquema de MongoDB Atlas](docs/mongodb_schema.md)
