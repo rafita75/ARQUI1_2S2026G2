@@ -253,9 +253,11 @@ equipo):
 - [x] Umbral de humedad como segunda causa de `ADVERTENCIA`, con la misma
       estructura que el umbral de temperatura — **falta confirmarlo en la
       Raspberry Pi real**.
-- [ ] Topics MQTT granulares por sensor/actuador (`edificio/sensores/...`,
-      `edificio/actuadores/...`, `edificio/estado/global`,
-      `edificio/arm64/resultados`) — ver [`mqtt_topics.md`](mqtt_topics.md).
+- [x] Topics MQTT granulares por sensor/actuador y estado global
+      (`grupo2/edificio/sensores/...`, `grupo2/edificio/actuadores/...`,
+      `grupo2/edificio/estado/global`) — ver [`mqtt_topics.md`](mqtt_topics.md).
+      **Falta confirmarlo en la Raspberry Pi real**. Sigue pendiente el
+      topic de `edificio/arm64/resultados`.
 - [ ] Registrar en la colección de comandos las acciones originadas por
       botón físico (hoy solo quedan como eventos).
 - [ ] Alinear nombres de colecciones de MongoDB con los del enunciado, o

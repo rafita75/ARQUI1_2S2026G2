@@ -6,39 +6,52 @@ Raspberry Pi y `wss://broker.emqx.io:8084/mqtt` desde el navegador
 
 ## Topics actualmente implementados
 
+Todos bajo el prefijo `grupo2/edificio/...` (mismo prefijo que ya usaba el
+proyecto para identificar al grupo, equivalente al `edificio/...` genérico
+del enunciado).
+
 | Topic | Dirección | Payload | Publicado/consumido en |
 |---|---|---|---|
-| `grupo2/edificio/sensores` | Pi → Dashboard | JSON con temperatura, humedad, gas, distancia, luz, estado global y estado de actuadores | `backend/main.py` (publica) / `frontend/script.js` (consume) |
+| `grupo2/edificio/sensores` | Pi → Dashboard | JSON combinado (todas las lecturas + estado global + estado de actuadores) | `backend/main.py` (publica) / `frontend/script.js` (consume) |
+| `grupo2/edificio/sensores/temperatura` | Pi → Dashboard | Valor numérico como texto | `backend/main.py` (publica) |
+| `grupo2/edificio/sensores/humedad` | Pi → Dashboard | Valor numérico como texto | `backend/main.py` (publica) |
+| `grupo2/edificio/sensores/gas` | Pi → Dashboard | Valor numérico (ADC 0-255) como texto | `backend/main.py` (publica) |
+| `grupo2/edificio/sensores/distancia` | Pi → Dashboard | Valor numérico (cm) como texto | `backend/main.py` (publica) |
+| `grupo2/edificio/sensores/luz` | Pi → Dashboard | Valor numérico (ADC 0-255) como texto | `backend/main.py` (publica) |
+| `grupo2/edificio/actuadores/puerta` | Pi → Dashboard | `Abierta` \| `Cerrada` | `backend/main.py` (publica) |
+| `grupo2/edificio/actuadores/luces` | Pi → Dashboard | `Encendidas` \| `Apagadas` | `backend/main.py` (publica) |
+| `grupo2/edificio/actuadores/ventilador` | Pi → Dashboard | `Encendido` \| `Apagado` | `backend/main.py` (publica) |
+| `grupo2/edificio/actuadores/alarma` | Pi → Dashboard | `Silenciada` \| `Activada` \| `Inactiva` | `backend/main.py` (publica) |
+| `grupo2/edificio/estado/global` | Pi → Dashboard | `NORMAL` \| `ADVERTENCIA` \| `EMERGENCIA` | `backend/main.py` (publica) |
 | `grupo2/edificio/comandos/puerta` | Dashboard → Pi | `ABRIR` \| `CERRAR` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
 | `grupo2/edificio/comandos/luces` | Dashboard → Pi | `ENCENDER` \| `APAGAR` \| `AUTO` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
 | `grupo2/edificio/comandos/ventilador` | Dashboard → Pi | `ENCENDER` \| `APAGAR` \| `AUTO` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
 | `grupo2/edificio/comandos/seguridad` | Dashboard → Pi | `SILENCIAR` \| `RESET` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
 
-## Topics pedidos por el enunciado y su estado actual
+Los topics granulares de sensores/actuadores/estado se publican **además**
+del payload combinado (mismo intervalo de 2 segundos, mismo bloque de
+código en `main.py`), no lo reemplazan — así el dashboard actual, que ya
+consume el payload combinado, sigue funcionando sin cambios mientras se
+actualiza para aprovechar los topics individuales si se quiere.
 
-El enunciado (sección 7, "Comunicación MQTT obligatoria") pide como mínimo
-topics separados por sensor/actuador y un topic para resultados de ARM64.
-Estado actual frente a esa lista:
+## Comparación contra la lista mínima del enunciado
 
 | Topic del enunciado | Estado |
 |---|---|
-| `edificio/sensores/temperatura` | Cubierto de forma agregada dentro de `grupo2/edificio/sensores` |
-| `edificio/sensores/humedad` | Cubierto de forma agregada dentro de `grupo2/edificio/sensores` |
-| `edificio/sensores/gas` | Cubierto de forma agregada dentro de `grupo2/edificio/sensores` |
-| `edificio/sensores/distancia` | Cubierto de forma agregada dentro de `grupo2/edificio/sensores` |
-| `edificio/sensores/luz` | Cubierto de forma agregada dentro de `grupo2/edificio/sensores` |
-| `edificio/actuadores/puerta` | No implementado como topic de estado (solo como topic de comando) |
-| `edificio/actuadores/luces` | No implementado como topic de estado (solo como topic de comando) |
-| `edificio/actuadores/ventilador` | Comando implementado (`grupo2/edificio/comandos/ventilador`); falta topic de estado dedicado |
-| `edificio/actuadores/alarma` | Comando de silenciar/reset implementado (`grupo2/edificio/comandos/seguridad`); falta topic de estado dedicado |
-| `edificio/estado/global` | Incluido dentro del payload de `grupo2/edificio/sensores`, no como topic propio |
-| `edificio/control/remoto` | Implementado como sub-topics `grupo2/edificio/comandos/<dispositivo>` |
+| `edificio/sensores/temperatura` | ✅ `grupo2/edificio/sensores/temperatura` |
+| `edificio/sensores/humedad` | ✅ `grupo2/edificio/sensores/humedad` |
+| `edificio/sensores/gas` | ✅ `grupo2/edificio/sensores/gas` |
+| `edificio/sensores/distancia` | ✅ `grupo2/edificio/sensores/distancia` |
+| `edificio/sensores/luz` | ✅ `grupo2/edificio/sensores/luz` |
+| `edificio/actuadores/puerta` | ✅ `grupo2/edificio/actuadores/puerta` |
+| `edificio/actuadores/luces` | ✅ `grupo2/edificio/actuadores/luces` |
+| `edificio/actuadores/ventilador` | ✅ `grupo2/edificio/actuadores/ventilador` |
+| `edificio/actuadores/alarma` | ✅ `grupo2/edificio/actuadores/alarma` |
+| `edificio/estado/global` | ✅ `grupo2/edificio/estado/global` |
+| `edificio/control/remoto` | ✅ Implementado como sub-topics `grupo2/edificio/comandos/<dispositivo>` |
 | `edificio/arm64/resultados` | **Pendiente** — el resultado ARM64 solo se guarda en MongoDB y se sirve por REST (`/api/historial/arm64/...`), no se publica por MQTT |
 
-> Nota: el sistema actual sí usa MQTT como medio de comunicación real (no lo
-> sustituye por llamadas directas), pero para cumplir literalmente la lista
-> mínima de topics del enunciado todavía falta: separar los topics de
-> sensores y publicar el estado de los actuadores, del estado global y del
-> resultado ARM64 en sus propios topics dedicados. Los comandos de
-> `ventilador` y `seguridad` (silenciar/reset) ya se agregaron a `main.py`
-> — pendiente confirmar en la Raspberry Pi real.
+> Único pendiente de esta lista: publicar el resultado del módulo ARM64 en
+> un topic MQTT (hoy solo llega al dashboard vía REST). Los demás topics
+> mínimos ya están implementados y probados con el simulador de hardware —
+> pendiente confirmar en la Raspberry Pi real.
