@@ -301,6 +301,18 @@ def main():
                                 tiempo_ms=tiempo_ejecucion_ms
                             )
                             db_arm64.guardar(datos_esquema)
+
+                            # Topic MQTT obligatorio para el resultado del modulo ARM64
+                            cliente_mqtt.publish(
+                                "grupo2/edificio/arm64/resultados",
+                                json.dumps({
+                                    "maximo": resultados_parseados["MÁX"],
+                                    "minimo": resultados_parseados["MIN"],
+                                    "promedio": resultados_parseados["AVG"],
+                                    "total_datos": int(resultados_parseados["COUNT"]),
+                                    "tiempo_ms": tiempo_ejecucion_ms
+                                })
+                            )
                     except Exception as e:
                         print(f"Error en flujo ARM64: {e}")
 
