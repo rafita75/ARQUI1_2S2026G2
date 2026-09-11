@@ -258,8 +258,10 @@ equipo):
       `grupo2/edificio/estado/global`) — ver [`mqtt_topics.md`](mqtt_topics.md).
       **Falta confirmarlo en la Raspberry Pi real**. Sigue pendiente el
       topic de `edificio/arm64/resultados`.
-- [ ] Registrar en la colección de comandos las acciones originadas por
-      botón físico (hoy solo quedan como eventos).
+- [x] Colección `comandos` ahora registra tanto los comandos del botón
+      físico como los del dashboard, con su `origen` correcto — ver
+      [`mongodb_schema.md`](mongodb_schema.md). **Falta confirmarlo en la
+      Raspberry Pi real**.
 - [ ] Alinear nombres de colecciones de MongoDB con los del enunciado, o
       justificar la equivalencia en la defensa técnica.
 - [ ] Evidencia capturada (capturas/video) de compilación, ejecución y
