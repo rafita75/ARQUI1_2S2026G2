@@ -19,6 +19,7 @@ sequenceDiagram
     Asm-->>Py: escribe resultado.txt
     Py->>Py: parsea resultado.txt
     Py->>Mongo: guarda Arm64Schema (maximo, minimo, promedio, total_datos, tiempo_ms)
+    Py->>Dash: MQTT grupo2/edificio/arm64/resultados (JSON)
     Dash->>Mongo: GET /api/historial/arm64/promedios (vía api.py)
     Dash->>Mongo: GET /api/historial/arm64/stats (vía api.py)
     Mongo-->>Dash: últimos resultados
@@ -55,8 +56,7 @@ AVG=24
 COUNT=4
 ```
 
-## Pendiente
-
-- Publicar el resultado también por MQTT en el topic `edificio/arm64/resultados`
-  (ver [`mqtt_topics.md`](mqtt_topics.md)) — hoy solo llega al dashboard vía
-  REST, no vía MQTT.
+El resultado también se publica por MQTT en el topic
+`grupo2/edificio/arm64/resultados` (ver [`mqtt_topics.md`](mqtt_topics.md)),
+además de guardarse en MongoDB y servirse por REST — pendiente confirmar en
+la Raspberry Pi real, ya que el binario ARM64 solo corre ahí.
