@@ -302,7 +302,7 @@ def main():
                             )
                             db_arm64.guardar(datos_esquema)
 
-                            # Topic MQTT obligatorio para el resultado del modulo ARM64
+                            # Publica el resultado del modulo ARM64 para el dashboard
                             cliente_mqtt.publish(
                                 "grupo2/edificio/arm64/resultados",
                                 json.dumps({
@@ -377,9 +377,7 @@ def main():
                 # Convertimos el diccionario a JSON y lo enviamos
                 cliente_mqtt.publish("grupo2/edificio/sensores", json.dumps(payload_sensores))
 
-                # Topics granulares por sensor/actuador/estado (ademas del payload
-                # combinado de arriba), para cumplir la lista minima de topics del
-                # enunciado sin romper al dashboard actual que consume el combinado.
+                # Topics individuales por sensor/actuador/estado, ademas del payload combinado
                 cliente_mqtt.publish("grupo2/edificio/sensores/temperatura", str(temp_actual))
                 cliente_mqtt.publish("grupo2/edificio/sensores/humedad", str(hum_actual))
                 cliente_mqtt.publish("grupo2/edificio/sensores/gas", str(nivel_gas))
