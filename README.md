@@ -1,5 +1,7 @@
 # Proyecto 1 — Arquitectura de Computadores y Ensambladores 1
 
+Grupo 2 — Arquitectura de Computadores y Ensambladores 1.
+
 Edificio Inteligente IoT con Raspberry Pi ARM64.
 
 ## Estructura del repositorio
