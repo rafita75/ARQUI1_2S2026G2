@@ -1,5 +1,7 @@
 # Diagrama de conexiones físicas (pines GPIO — BCM)
 
+Grupo 2 — Arquitectura de Computadores y Ensambladores 1
+
 Basado en los pines usados actualmente en el código (`backend/main.py` y
 `backend/controllers/*.py`).
 

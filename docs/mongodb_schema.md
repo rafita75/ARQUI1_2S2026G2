@@ -1,5 +1,7 @@
 # Esquema de MongoDB Atlas
 
+Grupo 2 — Arquitectura de Computadores y Ensambladores 1
+
 Base de datos: `proyecto1`.
 
 ## Colecciones actualmente implementadas

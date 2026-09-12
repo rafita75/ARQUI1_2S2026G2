@@ -1,5 +1,7 @@
 # Comunicación MQTT
 
+Grupo 2 — Arquitectura de Computadores y Ensambladores 1
+
 Broker utilizado: `broker.emqx.io` (EMQX público), puerto 1883 desde la
 Raspberry Pi y `wss://broker.emqx.io:8084/mqtt` desde el navegador
 (WebSockets).

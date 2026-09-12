@@ -1,6 +1,6 @@
 # Manual Técnico — Edificio Inteligente IoT con Raspberry Pi ARM64
 
-Arquitectura de Computadores y Ensambladores 1 — Proyecto 1
+Arquitectura de Computadores y Ensambladores 1 — Proyecto 1 — Grupo 2
 
 ## Índice
 

@@ -1,5 +1,7 @@
 # Arquitectura del Sistema — Edificio Inteligente IoT
 
+Grupo 2 — Arquitectura de Computadores y Ensambladores 1
+
 ## Visión general
 
 ```mermaid

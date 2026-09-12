@@ -1,5 +1,7 @@
 # Flujo Python → ARM64 → MongoDB → Dashboard
 
+Grupo 2 — Arquitectura de Computadores y Ensambladores 1
+
 ```mermaid
 sequenceDiagram
     participant DHT as Sensor DHT11
