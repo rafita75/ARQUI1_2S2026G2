@@ -258,10 +258,20 @@ equipo):
       `grupo2/edificio/estado/global`) — ver [`mqtt_topics.md`](mqtt_topics.md).
       **Falta confirmarlo en la Raspberry Pi real**. Sigue pendiente el
       topic de `edificio/arm64/resultados`.
-- [ ] Registrar en la colección de comandos las acciones originadas por
-      botón físico (hoy solo quedan como eventos).
-- [ ] Alinear nombres de colecciones de MongoDB con los del enunciado, o
-      justificar la equivalencia en la defensa técnica.
+- [x] Colección `comandos` ahora registra tanto los comandos del botón
+      físico como los del dashboard, con su `origen` correcto — ver
+      [`mongodb_schema.md`](mongodb_schema.md). **Falta confirmarlo en la
+      Raspberry Pi real**.
+- [x] LED rojo explícitamente ligado al estado global `EMERGENCIA` en
+      `main.py` (antes dependía implícitamente de que `ctrl_seguridad.py` lo
+      encendiera por su cuenta al detectar gas) — **falta confirmarlo en la
+      Raspberry Pi real**.
+- [ ] Alinear nombres de colecciones de MongoDB con los del enunciado.
+      **Decisión: no se hace antes de la entrega** — la calificación es
+      mañana (12/09/26) y renombrar las colecciones reales de MongoDB Atlas
+      arriesga dejar el dashboard sin historial si ya hay datos guardados
+      bajo los nombres actuales. Se mantiene la equivalencia documentada en
+      [`mongodb_schema.md`](mongodb_schema.md) para la defensa técnica.
 - [ ] Evidencia capturada (capturas/video) de compilación, ejecución y
       sesión de GDB del módulo ARM64.
 - [ ] Maqueta física, diagramas de conexión real (foto) y documentación de
