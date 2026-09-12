@@ -55,4 +55,4 @@ actualiza para aprovechar los topics individuales si se quiere.
 > Los 12 topics mínimos del enunciado ya están cubiertos. Probado con el
 > simulador de hardware (incluyendo un `subprocess.run` simulado para el
 > binario ARM64, ya que ese binario solo corre en Linux ARM64) — pendiente
-> confirmar en la Raspberry Pi real con el binario y el hardware reales.
+> confirmar en la Raspberry Pi real con el binario y hardware real.
