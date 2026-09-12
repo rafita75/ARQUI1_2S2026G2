@@ -9,7 +9,7 @@ Base de datos: `proyecto1`.
 | `sensores` | `modelo_lecturas.py` → `LecturaSchema` | `sensor`, `tipo`, `valor`, `unidad`, `timestamp` | `sensor_readings` |
 | `eventos` | `modelo_eventos.py` → `EventoSchema` | `tipo_evento`, `descripcion`, `severidad`, `timestamp` | `events` |
 | `estados` | `modelo_estado.py` → `EstadoSchema` | `estado_global`, `motivo`, `puerta_abierta`, `ventilador_encendido`, `luces_encendidas`, `alarma_activa`, `timestamp` | `system_status` |
-| (colección de `modelo_arm64.py`) | `Arm64Schema` | `maximo`, `minimo`, `promedio`, `total_datos`, `tiempo_ms` | `arm64_results` |
+| `arm64` | `modelo_arm64.py` → `Arm64Schema` | `maximo`, `minimo`, `promedio`, `total_datos`, `tiempo_ms` | `arm64_results` |
 | `comandos` | `modelo_comandos.py` → `ComandoSchema` | `actuador`, `accion`, `origen` (`"Botón Físico"` \| `"Dashboard Web"`), `timestamp` | `commands` |
 
 ## Nota sobre nombres
@@ -43,5 +43,4 @@ Esto además sigue guardando eventos vía `EventoSchema` en cada controlador
 (comportamiento previo sin cambios) — la colección `comandos` es un registro
 adicional, no un reemplazo.
 
-Validado con el simulador local (ver nota en `manual_tecnico.md`); pendiente
-confirmar en la Raspberry Pi real.
+Confirmado funcionando en la Raspberry Pi real.

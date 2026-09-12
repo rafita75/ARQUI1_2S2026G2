@@ -52,7 +52,5 @@ actualiza para aprovechar los topics individuales si se quiere.
 | `edificio/control/remoto` | ✅ Implementado como sub-topics `grupo2/edificio/comandos/<dispositivo>` |
 | `edificio/arm64/resultados` | ✅ `grupo2/edificio/arm64/resultados` (además de seguir guardándose en MongoDB y sirviéndose por REST, sin cambios ahí) |
 
-> Los 12 topics mínimos del enunciado ya están cubiertos. Probado con el
-> simulador de hardware (incluyendo un `subprocess.run` simulado para el
-> binario ARM64, ya que ese binario solo corre en Linux ARM64) — pendiente
-> confirmar en la Raspberry Pi real con el binario y hardware real.
+> Los 12 topics mínimos del enunciado están cubiertos y confirmados
+> funcionando en la Raspberry Pi real.

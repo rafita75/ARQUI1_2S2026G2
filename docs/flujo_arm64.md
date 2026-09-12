@@ -58,5 +58,4 @@ COUNT=4
 
 El resultado también se publica por MQTT en el topic
 `grupo2/edificio/arm64/resultados` (ver [`mqtt_topics.md`](mqtt_topics.md)),
-además de guardarse en MongoDB y servirse por REST — pendiente confirmar en
-la Raspberry Pi real, ya que el binario ARM64 solo corre ahí.
+además de guardarse en MongoDB y servirse por REST.
