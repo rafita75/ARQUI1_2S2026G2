@@ -11,6 +11,8 @@ Raspberry Pi y `wss://broker.emqx.io:8084/mqtt` desde el navegador
 | `grupo2/edificio/sensores` | Pi → Dashboard | JSON con temperatura, humedad, gas, distancia, luz, estado global y estado de actuadores | `backend/main.py` (publica) / `frontend/script.js` (consume) |
 | `grupo2/edificio/comandos/puerta` | Dashboard → Pi | `ABRIR` \| `CERRAR` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
 | `grupo2/edificio/comandos/luces` | Dashboard → Pi | `ENCENDER` \| `APAGAR` \| `AUTO` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
+| `grupo2/edificio/comandos/ventilador` | Dashboard → Pi | `ENCENDER` \| `APAGAR` \| `AUTO` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
+| `grupo2/edificio/comandos/seguridad` | Dashboard → Pi | `SILENCIAR` \| `RESET` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
 
 ## Topics pedidos por el enunciado y su estado actual
 
@@ -27,17 +29,16 @@ Estado actual frente a esa lista:
 | `edificio/sensores/luz` | Cubierto de forma agregada dentro de `grupo2/edificio/sensores` |
 | `edificio/actuadores/puerta` | No implementado como topic de estado (solo como topic de comando) |
 | `edificio/actuadores/luces` | No implementado como topic de estado (solo como topic de comando) |
-| `edificio/actuadores/ventilador` | **Pendiente** — no hay topic de comando ni de estado |
-| `edificio/actuadores/alarma` | **Pendiente** — no hay topic de comando ni de estado |
+| `edificio/actuadores/ventilador` | Comando implementado (`grupo2/edificio/comandos/ventilador`); falta topic de estado dedicado |
+| `edificio/actuadores/alarma` | Comando de silenciar/reset implementado (`grupo2/edificio/comandos/seguridad`); falta topic de estado dedicado |
 | `edificio/estado/global` | Incluido dentro del payload de `grupo2/edificio/sensores`, no como topic propio |
 | `edificio/control/remoto` | Implementado como sub-topics `grupo2/edificio/comandos/<dispositivo>` |
 | `edificio/arm64/resultados` | **Pendiente** — el resultado ARM64 solo se guarda en MongoDB y se sirve por REST (`/api/historial/arm64/...`), no se publica por MQTT |
 
 > Nota: el sistema actual sí usa MQTT como medio de comunicación real (no lo
 > sustituye por llamadas directas), pero para cumplir literalmente la lista
-> mínima de topics del enunciado falta: separar los topics de sensores,
-> publicar el estado de los actuadores y del estado global en sus propios
-> topics, agregar comandos de `ventilador` y `alarma`, y publicar el
-> resultado de ARM64 por MQTT. Estos cambios requieren tocar `main.py` (que
-> ya funciona en la Pi), por eso quedan documentados aquí como pendientes en
-> lugar de aplicarse directamente.
+> mínima de topics del enunciado todavía falta: separar los topics de
+> sensores y publicar el estado de los actuadores, del estado global y del
+> resultado ARM64 en sus propios topics dedicados. Los comandos de
+> `ventilador` y `seguridad` (silenciar/reset) ya se agregaron a `main.py`
+> — pendiente confirmar en la Raspberry Pi real.

@@ -247,13 +247,15 @@ equipo):
 - [x] Módulo ARM64 completo, con Makefile y pruebas independientes.
 - [x] Dashboard con panel principal, gráficas, controles e historial.
 - [x] Flujo Python → ARM64 → MongoDB → Dashboard demostrable.
+- [x] Comandos de `ventilador` y `seguridad` desde el dashboard conectados
+      en `main.py`, con modo manual/automático para el ventilador (igual
+      que las luces) — **falta confirmarlo en la Raspberry Pi real**.
+- [x] Umbral de humedad como segunda causa de `ADVERTENCIA`, con la misma
+      estructura que el umbral de temperatura — **falta confirmarlo en la
+      Raspberry Pi real**.
 - [ ] Topics MQTT granulares por sensor/actuador (`edificio/sensores/...`,
       `edificio/actuadores/...`, `edificio/estado/global`,
       `edificio/arm64/resultados`) — ver [`mqtt_topics.md`](mqtt_topics.md).
-- [ ] Comandos de `ventilador` y `seguridad` desde el dashboard conectados
-      en `main.py` (actualmente solo `puerta` y `luces` están suscritos).
-- [ ] Umbral de humedad como segunda causa de `ADVERTENCIA` (hoy solo se
-      evalúa la temperatura).
 - [ ] Registrar en la colección de comandos las acciones originadas por
       botón físico (hoy solo quedan como eventos).
 - [ ] Alinear nombres de colecciones de MongoDB con los del enunciado, o
