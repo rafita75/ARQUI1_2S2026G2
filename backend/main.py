@@ -338,6 +338,21 @@ def main():
                 }
                 # Convertimos el diccionario a JSON y lo enviamos
                 cliente_mqtt.publish("grupo2/edificio/sensores", json.dumps(payload_sensores))
+
+                # Topics granulares por sensor/actuador/estado (ademas del payload
+                # combinado de arriba), para cumplir la lista minima de topics del
+                # enunciado sin romper al dashboard actual que consume el combinado.
+                cliente_mqtt.publish("grupo2/edificio/sensores/temperatura", str(temp_actual))
+                cliente_mqtt.publish("grupo2/edificio/sensores/humedad", str(hum_actual))
+                cliente_mqtt.publish("grupo2/edificio/sensores/gas", str(nivel_gas))
+                cliente_mqtt.publish("grupo2/edificio/sensores/distancia", str(payload_sensores["distancia"]))
+                cliente_mqtt.publish("grupo2/edificio/sensores/luz", str(nivel_luz))
+                cliente_mqtt.publish("grupo2/edificio/actuadores/puerta", payload_sensores["actuadores"]["puerta"])
+                cliente_mqtt.publish("grupo2/edificio/actuadores/luces", payload_sensores["actuadores"]["luces"])
+                cliente_mqtt.publish("grupo2/edificio/actuadores/ventilador", payload_sensores["actuadores"]["ventilador"])
+                cliente_mqtt.publish("grupo2/edificio/actuadores/alarma", payload_sensores["actuadores"]["alarma"])
+                cliente_mqtt.publish("grupo2/edificio/estado/global", nivel_estado)
+
                 main.ultima_publicacion_mqtt = tiempo_actual
 
             time.sleep(0.1)
