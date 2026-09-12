@@ -23,6 +23,7 @@ del enunciado).
 | `grupo2/edificio/actuadores/ventilador` | Pi → Dashboard | `Encendido` \| `Apagado` | `backend/main.py` (publica) |
 | `grupo2/edificio/actuadores/alarma` | Pi → Dashboard | `Silenciada` \| `Activada` \| `Inactiva` | `backend/main.py` (publica) |
 | `grupo2/edificio/estado/global` | Pi → Dashboard | `NORMAL` \| `ADVERTENCIA` \| `EMERGENCIA` | `backend/main.py` (publica) |
+| `grupo2/edificio/arm64/resultados` | Pi → Dashboard | JSON: `maximo`, `minimo`, `promedio`, `total_datos`, `tiempo_ms` | `backend/main.py` (publica, justo después de guardarlo en MongoDB) |
 | `grupo2/edificio/comandos/puerta` | Dashboard → Pi | `ABRIR` \| `CERRAR` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
 | `grupo2/edificio/comandos/luces` | Dashboard → Pi | `ENCENDER` \| `APAGAR` \| `AUTO` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
 | `grupo2/edificio/comandos/ventilador` | Dashboard → Pi | `ENCENDER` \| `APAGAR` \| `AUTO` | `frontend/script.js` (publica) / `backend/main.py` (consume) |
@@ -49,9 +50,9 @@ actualiza para aprovechar los topics individuales si se quiere.
 | `edificio/actuadores/alarma` | ✅ `grupo2/edificio/actuadores/alarma` |
 | `edificio/estado/global` | ✅ `grupo2/edificio/estado/global` |
 | `edificio/control/remoto` | ✅ Implementado como sub-topics `grupo2/edificio/comandos/<dispositivo>` |
-| `edificio/arm64/resultados` | **Pendiente** — el resultado ARM64 solo se guarda en MongoDB y se sirve por REST (`/api/historial/arm64/...`), no se publica por MQTT |
+| `edificio/arm64/resultados` | ✅ `grupo2/edificio/arm64/resultados` (además de seguir guardándose en MongoDB y sirviéndose por REST, sin cambios ahí) |
 
-> Único pendiente de esta lista: publicar el resultado del módulo ARM64 en
-> un topic MQTT (hoy solo llega al dashboard vía REST). Los demás topics
-> mínimos ya están implementados y probados con el simulador de hardware —
-> pendiente confirmar en la Raspberry Pi real.
+> Los 12 topics mínimos del enunciado ya están cubiertos. Probado con el
+> simulador de hardware (incluyendo un `subprocess.run` simulado para el
+> binario ARM64, ya que ese binario solo corre en Linux ARM64) — pendiente
+> confirmar en la Raspberry Pi real con el binario y el hardware reales.
