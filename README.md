@@ -28,9 +28,3 @@ El código en ensamblador vive en `backend/arm64/logica.s`. Para compilar,
 probar de forma independiente y depurar con GDB sin afectar los archivos
 `datos.txt`/`resultado.txt` reales que usa `main.py`, ver
 [`backend/arm64/test/README.md`](backend/arm64/test/README.md).
-
-## Repositorio del curso
-
-El nombre del repositorio debe ser `ARQUI1_2S2026G#` (donde `#` es el número
-de grupo), y el usuario auxiliar `PoncheDeFrutas` debe ser colaborador con
-acceso de lectura.

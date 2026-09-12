@@ -242,37 +242,4 @@ Sensor DHT11 (temperatura real)
   (`openat`/`read`/`write`) en vez de la libc, para evidenciar manejo de
   bajo nivel real sin depender de un runtime de C.
 
-## 11. Estado del proyecto
 
-Checklist frente a los requisitos obligatorios del enunciado. Todos los
-puntos de código están implementados y confirmados funcionando en la
-Raspberry Pi real:
-
-- [x] Subsistemas de clima, gas, acceso y luces funcionando end-to-end.
-- [x] Panel físico (LCD + 4 botones).
-- [x] Módulo ARM64 completo, con Makefile y pruebas independientes.
-- [x] Dashboard con panel principal, gráficas, controles e historial.
-- [x] Flujo Python → ARM64 → MongoDB → Dashboard demostrable.
-- [x] Comandos de `ventilador` y `seguridad` desde el dashboard, con modo
-      manual/automático para el ventilador (igual que las luces).
-- [x] Umbral de humedad como segunda causa de `ADVERTENCIA`.
-- [x] Topics MQTT granulares por sensor, actuador, estado global y
-      resultado ARM64 — ver [`mqtt_topics.md`](mqtt_topics.md). Los 12
-      topics mínimos del enunciado están cubiertos.
-- [x] Colección `comandos` registra tanto los comandos del botón físico
-      como los del dashboard, con su `origen` correcto — ver
-      [`mongodb_schema.md`](mongodb_schema.md).
-- [x] LED rojo ligado explícitamente al estado global `EMERGENCIA`.
-
-Único punto que se decidió no cambiar, por diseño:
-
-- Los nombres de las colecciones de MongoDB (`sensores`, `eventos`,
-  `estados`, `arm64`, `comandos`) no se renombraron a los literales del
-  enunciado (`sensor_readings`, `events`, etc.) para no arriesgar el
-  historial ya guardado en Atlas justo antes de la entrega. La equivalencia
-  queda documentada en [`mongodb_schema.md`](mongodb_schema.md) para la
-  defensa técnica.
-
-Pendientes fuera del código (maqueta física, evidencias en video/capturas,
-documentación de participación del equipo) se coordinan directamente con el
-equipo, no requieren cambios de software.
